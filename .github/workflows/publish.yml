@@ -1,0 +1,88 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - 'v0.*'
+      - 'v0.0.*'
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type to release'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            # Get the latest tag and remove 'v' prefix
+            VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.1")
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Pack
+        run: |
+          dotnet pack src/Fermat.Domain.Shared/Fermat.Domain.Shared.csproj \
+            --configuration Release \
+            --no-build \
+            --output nupkgs \
+            /p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
+
+      - name: List packages
+        run: ls -la nupkgs/
+
+      - name: Publish to NuGet
+        run: |
+          dotnet nuget push nupkgs/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          body: |
+            ## Changes
+            - Version ${{ steps.get_version.outputs.VERSION }}
+            - Updated package available on NuGet 

@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AF5F72E9-4512-4333-8393-33EAC86229B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B5531B18-5F77-4084-9ECC-DCA18E92BF79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fermat.Domain.Shared", "src\Fermat.Domain.Shared\Fermat.Domain.Shared.csproj", "{A7EDBC4F-BBF0-4197-B138-4C0888643379}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fermat.Domain.Shared.Test", "test\Fermat.Domain.Shared.Test\Fermat.Domain.Shared.Test.csproj", "{1B0941E3-F727-47C3-B0DE-BF51F79507F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A7EDBC4F-BBF0-4197-B138-4C0888643379} = {AF5F72E9-4512-4333-8393-33EAC86229B3}
+		{1B0941E3-F727-47C3-B0DE-BF51F79507F0} = {B5531B18-5F77-4084-9ECC-DCA18E92BF79}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7EDBC4F-BBF0-4197-B138-4C0888643379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7EDBC4F-BBF0-4197-B138-4C0888643379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7EDBC4F-BBF0-4197-B138-4C0888643379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7EDBC4F-BBF0-4197-B138-4C0888643379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B0941E3-F727-47C3-B0DE-BF51F79507F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B0941E3-F727-47C3-B0DE-BF51F79507F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B0941E3-F727-47C3-B0DE-BF51F79507F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B0941E3-F727-47C3-B0DE-BF51F79507F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
