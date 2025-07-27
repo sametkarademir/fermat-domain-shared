@@ -69,22 +69,20 @@ ls -la nupkg/
 
 # Check Git status or force commit for initial release
 echo "🔍 Checking git status and FORCE_COMMIT: $FORCE_COMMIT"
-if [ -n "$(git status --porcelain)" ] || [ "$FORCE_COMMIT" = "true" ]; then
+if [ -n "$(git status --porcelain)" ]; then
     echo "📤 Committing changes..."
     git add "$PROJECT_FILE"
     git commit -m "chore: bump version to ${NEW_VERSION}"
     git tag "$NEW_VERSION"
     git push origin main --tags
     echo "🎉 Version bumped and pushed. CI will now handle publish."
+elif [ "$FORCE_COMMIT" = "true" ]; then
+    echo "📤 Creating initial tag and pushing..."
+    git tag "$NEW_VERSION"
+    git push origin main --tags
+    echo "🎉 Initial tag created and pushed. CI will now handle publish."
 else
     echo "⚠️  No changes to commit."
-    # For initial release, create tag even if no changes
-    if [ "$FORCE_COMMIT" = "true" ]; then
-        echo "📤 Creating initial tag and pushing..."
-        git tag "$NEW_VERSION"
-        git push origin main --tags
-        echo "🎉 Initial tag created and pushed. CI will now handle publish."
-    fi
 fi
 
 echo "✅ Release process completed!"
