@@ -77,6 +77,13 @@ if [ -n "$(git status --porcelain)" ] || [ "$FORCE_COMMIT" = "true" ]; then
     echo "🎉 Version bumped and pushed. CI will now handle publish."
 else
     echo "⚠️  No changes to commit."
+    # For initial release, create tag even if no changes
+    if [ "$FORCE_COMMIT" = "true" ]; then
+        echo "📤 Creating initial tag and pushing..."
+        git tag "$NEW_VERSION"
+        git push origin main --tags
+        echo "🎉 Initial tag created and pushed. CI will now handle publish."
+    fi
 fi
 
 echo "✅ Release process completed!"
