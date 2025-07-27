@@ -68,6 +68,7 @@ echo "📋 Generated packages:"
 ls -la nupkg/
 
 # Check Git status or force commit for initial release
+echo "🔍 Checking git status and FORCE_COMMIT: $FORCE_COMMIT"
 if [ -n "$(git status --porcelain)" ] || [ "$FORCE_COMMIT" = "true" ]; then
     echo "📤 Committing changes..."
     git add "$PROJECT_FILE"
