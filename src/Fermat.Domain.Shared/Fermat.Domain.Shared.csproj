@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PackageId>Fermat.Domain.Shared</PackageId>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.0</Version>
+        <Version>0.0.2</Version>
         <Authors>Samet Karademir</Authors>
         <Description>A comprehensive library that provides common abstractions, base classes, and utilities for domain-driven design in .NET applications.</Description>
         <PackageTags>domain-driven-design;ddd;entity;audit;convention;filter</PackageTags>
