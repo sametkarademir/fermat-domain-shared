@@ -18,8 +18,6 @@ echo "📍 Latest tag: $LATEST_TAG"
 if [ -z "$LATEST_TAG" ] || [ -z "$(git tag -l)" ]; then
     echo "⚠️  No tags found. Starting with v0.0.1"
     NEW_VERSION="v0.0.1"
-    # Force commit even if version is the same for initial release
-    FORCE_COMMIT=true
 else
     # Increment version
     IFS='.' read -r major minor patch <<< "${LATEST_TAG#v}"
@@ -67,8 +65,7 @@ dotnet pack "$PROJECT_FILE" -c Release -o nupkg --no-build /p:PackageVersion="${
 echo "📋 Generated packages:"
 ls -la nupkg/
 
-# Check Git status or force commit for initial release
-echo "🔍 Checking git status and FORCE_COMMIT: $FORCE_COMMIT"
+# Check Git status
 if [ -n "$(git status --porcelain)" ]; then
     echo "📤 Committing changes..."
     git add "$PROJECT_FILE"
@@ -76,11 +73,6 @@ if [ -n "$(git status --porcelain)" ]; then
     git tag "$NEW_VERSION"
     git push origin main --tags
     echo "🎉 Version bumped and pushed. CI will now handle publish."
-elif [ "$FORCE_COMMIT" = "true" ]; then
-    echo "📤 Creating initial tag and pushing..."
-    git tag "$NEW_VERSION"
-    git push origin main --tags
-    echo "🎉 Initial tag created and pushed. CI will now handle publish."
 else
     echo "⚠️  No changes to commit."
 fi
