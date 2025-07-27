@@ -14,10 +14,12 @@ echo "🚀 Starting release process..."
 LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
 echo "📍 Latest tag: $LATEST_TAG"
 
-# If no tags exist, start with v1.0.0
+# If no tags exist, start with v0.0.1
 if [ -z "$LATEST_TAG" ] || [ -z "$(git tag -l)" ]; then
     echo "⚠️  No tags found. Starting with v0.0.1"
     NEW_VERSION="v0.0.1"
+    # Force commit even if version is the same for initial release
+    FORCE_COMMIT=true
 else
     # Increment version
     IFS='.' read -r major minor patch <<< "${LATEST_TAG#v}"
@@ -65,8 +67,8 @@ dotnet pack "$PROJECT_FILE" -c Release -o nupkg --no-build /p:PackageVersion="${
 echo "📋 Generated packages:"
 ls -la nupkg/
 
-# Check Git status
-if [ -n "$(git status --porcelain)" ]; then
+# Check Git status or force commit for initial release
+if [ -n "$(git status --porcelain)" ] || [ "$FORCE_COMMIT" = "true" ]; then
     echo "📤 Committing changes..."
     git add "$PROJECT_FILE"
     git commit -m "chore: bump version to ${NEW_VERSION}"
