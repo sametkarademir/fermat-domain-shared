@@ -16,6 +16,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     </ItemGroup>
 </Project>
