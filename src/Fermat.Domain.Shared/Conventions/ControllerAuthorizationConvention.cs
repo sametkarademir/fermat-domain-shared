@@ -64,9 +64,9 @@ public class AuthorizationOptions
 /// <param name="endpointOptions">Endpoint-specific authorization configurations.</param>
 public class ControllerAuthorizationConvention(
     Type controllerType,
-    string route,
     AuthorizationOptions authorizationOptions,
-    List<EndpointOptions>? endpointOptions = null)
+    List<EndpointOptions>? endpointOptions = null,
+    string? route = null)
     : IControllerModelConvention
 {
     public void Apply(ControllerModel controller)
@@ -76,11 +76,14 @@ public class ControllerAuthorizationConvention(
             return;
         }
 
-        foreach (var selector in controller.Selectors)
+        if (!string.IsNullOrEmpty(route))
         {
-            if (selector.AttributeRouteModel != null)
+            foreach (var selector in controller.Selectors)
             {
-                selector.AttributeRouteModel.Template = route;
+                if (selector.AttributeRouteModel != null)
+                {
+                    selector.AttributeRouteModel.Template = route;
+                }
             }
         }
 
